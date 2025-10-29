@@ -25,15 +25,16 @@ body {
   flex-direction: column;
 }
 
-/* Header */
+/* Header - 투명하게 */
 .header {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: 12px 16px;
   display: flex;
   align-items: center;
@@ -43,31 +44,34 @@ body {
 .search-input {
   flex: 1;
   padding: 10px 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: none;
+  border-radius: 12px;
   font-size: 16px;
   outline: none;
-  background: #f5f5f5;
+  background: rgba(255, 255, 255, 0.9);
   color: #999;
   cursor: not-allowed;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .options-button {
   width: 44px;
   height: 44px;
   border: none;
-  background: #f5f5f5;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
   cursor: pointer;
   font-size: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .options-button:hover {
-  background: #e5e5e5;
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.05);
 }
 
 /* Map Container */
@@ -83,12 +87,58 @@ body {
   height: 100%;
 }
 
-/* GPS Button */
-.gps-button {
+/* 우하단 컨트롤 (줌 + GPS) */
+.bottom-right-controls {
   position: absolute;
   bottom: 24px;
   right: 24px;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+/* 줌 컨트롤 */
+.zoom-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.zoom-button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: #333;
+}
+
+.zoom-button:hover {
+  background: #f5f5f5;
+}
+
+.zoom-button:active {
+  transform: scale(0.95);
+}
+
+.zoom-button:first-child {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+/* GPS 버튼 */
+.gps-button {
   width: 56px;
   height: 56px;
   border: none;

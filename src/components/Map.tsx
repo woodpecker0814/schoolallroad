@@ -2,18 +2,22 @@ import { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import buildingsData from '../data/buildings.json';
 
-const Map = () => {
+interface MapProps {
+  onMapReady?: (map: L.Map) => void;
+}
+
+const Map = ({ onMapReady }: MapProps) => {
   const mapRef = useRef<L.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
 
-    // 지도 초기화 (베이스맵 없이)
+    // 지도 초기화 (베이스맵 없이, 줌 컨트롤 제거)
     const map = L.map(mapContainerRef.current, {
       center: [36.354, 127.425],
       zoom: 16,
-      zoomControl: true,
+      zoomControl: false,
       attributionControl: false
     });
 
@@ -36,27 +40,7 @@ const Map = () => {
         const bounds = layer.getBounds();
         const center = bounds.getCenter();
 
-        // 건물 번호 라벨 추가
-        const label = L.marker(center, {
-          icon: L.divIcon({
-            className: 'building-label',
-            html: `<div style="
-              background: white;
-              padding: 4px 8px;
-              border-radius: 4px;
-              font-size: 13px;
-              font-weight: 600;
-              color: #333;
-              box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-              white-space: nowrap;
-              pointer-events: none;
-            ">${buildingNumber}</div>`,
-            iconSize: [30, 20],
-            iconAnchor: [15, 10]
-          })
-        }).addTo(map);
-
-        // 건물 클릭 이벤트
+        // 건물 클릭 이벤트 (클릭 시에만 번호 표시)
         layer.on('click', () => {
           L.popup()
             .setLatLng(center)
@@ -69,6 +53,11 @@ const Map = () => {
     // 모든 건물이 보이도록 자동 맞춤
     const bounds = geoJsonLayer.getBounds();
     map.fitBounds(bounds, { padding: [50, 50] });
+
+    // 지도 준비 완료 콜백
+    if (onMapReady) {
+      onMapReady(map);
+    }
 
     // Cleanup
     return () => {
